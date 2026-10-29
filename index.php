@@ -1,6 +1,6 @@
 <?php
 /**
- * ColorManager — صفحه اصلی
+ * Rangban — صفحه اصلی
  */
 
 declare(strict_types=1);

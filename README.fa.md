@@ -1,4 +1,4 @@
-# رنگ‌بان — ColorManager
+# رنگ‌بان — Rangban
 
 [English](README.md) | [فارسی](#رنگ‌بان)
 
@@ -7,8 +7,8 @@
 ## نصب
 
 ```bash
-mysql -u root -e "CREATE DATABASE colormanager"
-mysql -u root colormanager < db/schema.sql
+mysql -u root -e "CREATE DATABASE rangban"
+mysql -u root rangban < db/schema.sql
 # فایل config.php را با اطلاعات دیتابیس ویرایش کنید
 php -S localhost:8000
 ```

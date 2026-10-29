@@ -1,13 +1,13 @@
 <?php
 /**
- * ColorManager — تنظیمات کلی
+ * Rangban — تنظیمات کلی
  */
 
 declare(strict_types=1);
 
 const DB_HOST = '127.0.0.1';
 const DB_PORT = 3306;
-const DB_NAME = 'colormanager';
+const DB_NAME = 'rangban';
 const DB_USER = 'root';
 const DB_PASS = '';
 

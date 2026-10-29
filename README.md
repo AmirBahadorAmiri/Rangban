@@ -1,14 +1,14 @@
-# ColorManager — رنگ‌بان
+# Rangban — رنگ‌بان
 
-[فارسی](README.fa.md) | [English](#colormanager)
+[فارسی](README.fa.md) | [English](#rangban)
 
 Web-based color palette manager with export to CSS/SCSS/JSON/Tailwind.
 
 ## Install
 
 ```bash
-mysql -u root -e "CREATE DATABASE colormanager"
-mysql -u root colormanager < db/schema.sql
+mysql -u root -e "CREATE DATABASE rangban"
+mysql -u root rangban < db/schema.sql
 # Edit config.php with DB credentials
 php -S localhost:8000
 ```
