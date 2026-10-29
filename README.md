@@ -1,149 +1,92 @@
-# رنگ‌بان — ColorManager
-## مدیریت و سازمان‌دهی پالت‌های رنگی (PHP + MySQL)
+# ColorManager — رنگ‌بان
 
-رنگ‌بان یک ابزار تحت وب برای ساخت پالت‌های رنگی، ذخیره‌سازی آن‌ها در دیتابیس، ویرایش، کپی‌کردن و خروجی گرفتن در فرمت‌های مختلف است. با دیزاین اختصاصی RTL فارسی و **context menu (منوی راست‌کلیک) اختصاصی**.
+[فارسی](README.fa.md) | [English](#colormanager)
 
----
+Web-based color palette manager with export to CSS/SCSS/JSON/Tailwind.
 
-## 📋 ویژگی‌ها
+## Install
 
-| دسته | ویژگی |
-|---|---|
-| **مدیریت** | ساخت پالت جدید، ویرایش نام و توضیحات، حذف پالت |
-| **رنگ‌ها** | افزودن/ویرایش/حذف رنگ، اولویت/ترتیب‌دهی با Drag & Drop، ستاره‌دار کردن |
-| **ابزارها** | کپی HEX/RGB/متغیر CSS، انتخابگر رنگ، روشن‌تر/تیره‌تر |
-| **خروجی** | CSS Variables / SCSS / JSON / Tailwind / TXT |
-| **UI** | تم روشن/تیره با ذخیرهٔ انتخاب کاربر، راست‌کلیک اختصاصی (Color Palette + Color)، جستجوی سریع (`Ctrl+K`)، Toast، ریسپانسیو |
+```bash
+mysql -u root -e "CREATE DATABASE colormanager"
+mysql -u root colormanager < db/schema.sql
+# Edit config.php with DB credentials
+php -S localhost:8000
+```
 
----
+## Features
 
-## 🚀 نصب و اجرا
+- Create/edit/delete color palettes
+- Add colors with HEX picker
+- Drag-and-drop reordering
+- Favorite colors
+- Lighten/darken colors (±10%)
+- Random palette generator
+- Export: CSS, SCSS, JSON, Tailwind, TXT
+- Dark/light theme with auto-detect
+- Persian (Farsi) UI
 
-### پیش‌نیازها
-- PHP 8.2+ (نصب است)
-- MySQL / MariaDB 10.4+ (نصب است)
-- XAMPP (Apache یا `php-cgi`)
+## Requirements
 
-### گام‌های راه‌اندازی
+- PHP 8.0+
+- MySQL 5.7+ / MariaDB 10.3+
 
-1. **دیتابیس** — نیازی به کار دستی نیست: برنامه در اولین اجرا دیتابیس و جداول را خودکار می‌سازد.
-   برای داده‌ی نمونه:
-   ```bash
-   C:\xampp\php\php.exe db\seed.php
-   ```
-   فایل مرجع ساختار جداول: `db/schema.sql`
+## Export Formats
 
-2. **دسترسی از وب**:
-   - روی سیستم خود: `http://localhost/ColorManager/`
-   - یا با `php-cgi`:
-     ```bash
-     C:\xampp\php\php-cgi.exe -S 127.0.0.1:8765 -t C:\xampp\htdocs\www
-     # سپس: http://127.0.0.1:8765/ColorManager/
-     ```
+| Format | Example |
+|--------|---------|
+| CSS | `:root { --primary: #FF5733; }` |
+| SCSS | `$primary: #FF5733;` |
+| JSON | `{"colors": [{"hex": "#FF5733", "name": "primary"}]}` |
+| Tailwind | `colors: { primary: '#FF5733' }` |
+| TXT | `#FF5733` (one per line) |
 
-3. **پایان** — فایل `test.php` را پس از تست حذف کنید.
+## API Reference
 
----
+All endpoints via `src/api.php` (POST/GET with CSRF token).
 
-## 🗂 ساختار فایل‌ها
+| Action | Required Params | Optional |
+|--------|----------------|----------|
+| `palette_create` | `name` | `description` |
+| `palette_update` | `id`, `name` | `description` |
+| `palette_delete` | `id` | — |
+| `color_add` | `palette_id`, `hex` | `name` |
+| `color_update` | `id`, `hex` | `name` |
+| `color_delete` | `id` | — |
+| `color_favorite` | `id` | — |
+| `color_reorder` | `palette_id`, `ids` (JSON array) | — |
+| `color_shade` | `id`, `percent` (±1-50) | — |
+| `palette_random` | `id` | `replace` (default: 1) |
+
+## Project Structure
 
 ```
-ColorManager/
-├── config.php              # تنظیمات دیتابیس + بارگذاری
-├── index.php               # صفحه اصلی (UI کامل)
-├── export.php              # خروجی پالت (CSS/SCSS/JSON/Tailwind/TXT)
-├── test.php                # تِست عملکردی — بعداً حذف شود
-├── db/
-│   ├── schema.sql          # مرجع ساختار جداول
-│   └── seed.php            # داده‌ی نمونه‌ی اولیه
+├── index.php           # Main application UI
+├── config.php          # Database configuration
+├── export.php          # Export endpoint
 ├── src/
-│   ├── database.php        # اتصال PDO سینگلتن + نصب خودکار جداول
-│   ├── helpers.php         # e(), json_out(), normalize_hex(), csrf
-│   ├── color_tools.php     # HEX↔RGB↔HSL، کنتراست WCAG، scheme، shade
-│   ├── repository.php      # عملیات CRUD پالت/رنگ + پالت تصادفی
-│   └── api.php             # endpoint AJAX
-└── assets/
-    ├── style.css           # استایل اختصاصی با تم روشن/تیره + RTL
-    └── app.js              # مودال، context menu، Drag&Drop، جستجو
+│   ├── api.php         # AJAX request handler
+│   ├── repository.php  # Database CRUD operations
+│   ├── database.php    # PDO connection
+│   ├── helpers.php     # CSRF, flash messages, sanitization
+│   └── color_tools.php # HEX/RGB/HSL conversion, WCAG contrast
+├── assets/
+│   ├── style.css       # Application styles
+│   └── app.js          # Frontend JavaScript
+└── db/
+    └── schema.sql      # Database schema
 ```
 
----
+## Color Tools
 
-## 🗄 نقشه جداول
+Built-in functions in `src/color_tools.php`:
 
-**palettes**
-| ستون | توضیح |
-|---|---|
-| `id` | کلید اصلی |
-| `name` | نام پالت |
-| `description` | توضیح اختیاری |
-| `created_at` / `updated_at` | تاریخ‌ها |
-| `last_used_at` | مرتب‌سازی پیش‌فرض |
+- `hex_to_rgb()` / `rgb_to_hex()` — HEX ↔ RGB conversion
+- `rgb_to_hsl()` / `hsl_to_rgb()` — RGB ↔ HSL conversion
+- `shade_hex()` — Lighten/darken by percentage
+- `contrast_ratio()` — WCAG contrast ratio between colors
+- `readable_text_color()` — Auto-select white/black text for background
+- `generate_scheme()` — Generate harmonious palettes (complementary, analogous, triadic, tetradic, split, monochrome)
 
-**colors**
-| ستون | توضیح |
-|---|---|
-| `id` | کلید اصلی |
-| `palette_id` | کلید خارجی → palettes (CASCADE) |
-| `hex_code` | کد ۶ رقمی HEX (`#RRGGBB`) |
-| `name` | نام اختیاری رنگ |
-| `position` | ترتیب نمایش |
-| `is_favorite` | ستاره‌دار |
+## License
 
----
-
-## ⚙️ API (src/api.php)
-
-همه‌ی عملیات تغییردهنده از CSRF توکن محافظت می‌شوند. پاسخ JSON:
-
-| action | ورودی | خروجی |
-|---|---|---|
-| `palette_create` | name, description | `{ok, id}` |
-| `palette_update` | id, name, description | `{ok}` |
-| `palette_delete` | id | `{ok}` |
-| `palette_random` | id, replace (0/1) | `{ok, colors, hexes[]}` |
-| `color_add` | palette_id, hex, name | `{ok, id, hex}` |
-| `color_update` | id, hex, name | `{ok, hex}` |
-| `color_delete` | id | `{ok}` |
-| `color_favorite` | id | `{ok}` |
-| `color_reorder` | palette_id, ids[] | `{ok}` |
-| `color_shade` | id, percent (۱ تا ±۵۰) | `{ok, hex}` |
-
----
-
-## 🎨 استفاده از خروجی‌ها
-
-دانلود فایل **Tailwind**:
-```js
-module.exports = {
-  theme: { extend: { colors: {
-    'my-palette': {
-      'primary': '#7C6CFF',
-      'accent': '#33D6A6',
-    },
-  } } }
-}
-```
-
-دانلود **CSS Variables**:
-```css
-:root { --primary: #7C6CFF; --accent: #33D6A6; }
-```
-
----
-
-## 🛠 نکات توسعه
-
-- برای افزودن رنگ جدید: `color_create($paletteId, '#RRGGBB', $name)`
-- برای تغییر ترتیب: `color_reorder($paletteId, [id, id, ...])`
-- روشن/تیره کردن: `shade_hex('#7C6CFF', +10)` → `#A99EFF`
-- پالت تصادفی: `palette_randomize($paletteId, replace: true)`
-- محاسبه کنتراست: `contrast_ratio('#0f172a', '#ffffff')` → برمی‌گرداند عدد ۱ تا ۲۱
-- رنگ متنی مناسب: `readable_text_color('#7C6CFF')` → `#FFFFFF`
-- تولید scheme: `generate_scheme('#7c6cff', 'complementary')` → `['#7C6CFF', '#FF5E78']`
-
----
-
-## 📝 مجوز
-
-ساخته‌شده برای امیر — استفاده شخصی و پروژه‌های شخصی آزاد است.
+MIT
