@@ -35,7 +35,6 @@
 *   Add colors via HEX code or color picker
 *   Lighten and darken colors (+10% / -10%)
 *   Automatic RGB and HSL display
-*   **Random palette with 6 harmony schemes**
 
 ### 💾 Export Options
 *   **CSS Variables** — for web projects
@@ -95,7 +94,7 @@
 ## 🔄 JSON Import & Export
 
 *   **Export a single palette:** open the palette → export menu → **JSON**
-*   **Export all palettes:** export menu → **JSON — All palettes**
+*   **Export all palettes:** header → **Export all**
 *   **Import:** header → **Import JSON**, then pick a `.json` file
 *   Importing always **creates new palettes** and never overwrites existing data. Palette names, descriptions, colors, and starred colors are restored.
 *   Both single-palette and all-palettes files are accepted. Invalid colors are skipped and reported in the result message.
@@ -122,7 +121,7 @@ ColorManager/
 │   ├── database.php   PDO connection and schema
 │   ├── repository.php CRUD operations
 │   ├── helpers.php    Helper functions
-│   ├── color_tools.php Color conversion and schemes
+│   ├── color_tools.php Color conversion and analysis
 │   └── transfer.php   JSON export/import helpers
 ├── assets/
 │   ├── style.css      Styles
@@ -148,7 +147,6 @@ All requests go to `src/api.php` via POST with CSRF token.
 | `color_favorite` | Toggle star | id |
 | `color_reorder` | Reorder colors | palette_id, ids[] |
 | `color_shade` | Lighten/darken | id, percent |
-| `palette_random` | Random palette | id, replace |
 | `palette_import` | Import palettes from JSON | data (JSON string) |
 
 ---

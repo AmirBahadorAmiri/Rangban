@@ -260,9 +260,6 @@ $('#btn-new-palette').addEventListener('click', () => openModal('palette_create'
 $('#btn-add-color')?.addEventListener('click', () => openModal('color_add'));
 $('#btn-first-color')?.addEventListener('click', () => openModal('color_add'));
 $('#btn-welcome-create')?.addEventListener('click', () => openModal('palette_create'));
-$('#btn-random')?.addEventListener('click', () =>
-    randomizePalette(CM.paletteId, $('[data-ctx="palette"]')?.dataset.ctxName ?? 'پالت'));
-
 $('#btn-export')?.addEventListener('click', () => {
     const menu = $('#export-menu');
     menu.hidden = !menu.hidden;
@@ -441,22 +438,6 @@ function repaintSwatch(el, hex) {
     }
 }
 
-/** پالت تصادفی — با تأیید جایگزینی وقتی پالت رنگ دارد */
-async function randomizePalette(pid, name) {
-    if (!pid) return;
-    const isCurrent = pid === CM.paletteId;
-    const hasColors = isCurrent && $$('.swatch').length > 0;
-    if (hasColors && !confirm(`همهٔ رنگ‌های «${name}» با پالت تصادفی جایگزین شود؟`)) return;
-
-    const res = await api('palette_random', { id: pid, replace: hasColors ? 1 : 0 });
-    if (!res.ok) {
-        toast(res.error || 'خطای نامشخص', 'error');
-        return;
-    }
-    toast('پالت تصادفی ساخته شد (' + res.colors + ' رنگ) 🎲');
-    if (isCurrent) setTimeout(() => location.reload(), 500);
-}
-
 ctxMenu.addEventListener('click', async ev => {
     const btn = ev.target.closest('.ctx-item');
     if (!btn || !ctxTarget) return;
@@ -540,10 +521,6 @@ ctxMenu.addEventListener('click', async ev => {
 
         case 'add-color':
             openModal('color_add', { paletteId: t.id });
-            break;
-
-        case 'randomize':
-            await randomizePalette(t.id, t.name);
             break;
 
         case 'copy-all': {

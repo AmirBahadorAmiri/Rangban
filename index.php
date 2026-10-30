@@ -47,7 +47,7 @@ $activePalette = $activeId ? palette_find($activeId) : null;
     document.head.appendChild(meta);
 })();
 </script>
-<link rel="stylesheet" href="assets/style.css?v=5">
+<link rel="stylesheet" href="assets/style.css?v=7">
 <link rel="icon" href="assets/logo.svg">
 </head>
 <body>
@@ -73,6 +73,12 @@ $activePalette = $activeId ? palette_find($activeId) : null;
             <span>ورود JSON</span>
         </button>
         <input type="file" id="import-file" accept=".json,application/json" hidden>
+        <?php if ($palettes): ?>
+        <a class="btn btn-ghost" href="export.php?scope=all&format=json" download title="خروجی JSON همهٔ پالت‌ها">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            <span>خروجی همه</span>
+        </a>
+        <?php endif; ?>
         <button class="btn btn-primary" id="btn-new-palette">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             <span>پالت جدید</span>
@@ -119,9 +125,6 @@ $activePalette = $activeId ? palette_find($activeId) : null;
                 <button class="tool-btn" id="btn-add-color" title="افزودن رنگ">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </button>
-                <button class="tool-btn" id="btn-random" title="پالت تصادفی">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>
-                </button>
                 <div class="export-wrap">
                     <button class="tool-btn" id="btn-export" title="خروجی گرفتن">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
@@ -130,8 +133,6 @@ $activePalette = $activeId ? palette_find($activeId) : null;
                         <?php foreach (['css' => 'CSS Variables', 'scss' => 'SCSS', 'json' => 'JSON', 'tailwind' => 'Tailwind', 'txt' => 'TXT'] as $f => $label): ?>
                             <a href="export.php?palette=<?= (int) $activePalette['id'] ?>&format=<?= $f ?>" download><?= $label ?></a>
                         <?php endforeach; ?>
-                        <div class="dropdown-sep"></div>
-                        <a href="export.php?scope=all&format=json" download>JSON — همهٔ پالت‌ها</a>
                     </div>
                 </div>
             </div>
@@ -204,7 +205,6 @@ $activePalette = $activeId ? palette_find($activeId) : null;
     <div class="ctx-head"><span class="ctx-hex-label"></span></div>
     <button class="ctx-item" data-cmd="rename">تغییر نام پالت…</button>
     <button class="ctx-item" data-cmd="add-color">افزودن رنگ…</button>
-    <button class="ctx-item" data-cmd="randomize">پالت تصادفی 🎲</button>
     <button class="ctx-item" data-cmd="copy-all">کپی همهٔ رنگ‌ها</button>
     <div class="ctx-sep"></div>
     <button class="ctx-item danger" data-cmd="delete">حذف پالت</button>
@@ -259,6 +259,6 @@ window.CM = {
     paletteId: <?= (int) $activeId ?: 'null' ?>
 };
 </script>
-<script src="assets/app.js?v=5"></script>
+<script src="assets/app.js?v=7"></script>
 </body>
 </html>

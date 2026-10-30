@@ -155,38 +155,3 @@ function color_family_name(array $hsl): string
         default              => 'صورتی',
     };
 }
-
-/** تولید پالت‌های هماهنگ از یک رنگ پایه */
-function generate_scheme(string $hex, string $type): array
-{
-    ['r' => $r, 'g' => $g, 'b' => $b] = hex_to_rgb($hex);
-    $hsl = rgb_to_hsl($r, $g, $b);
-    $base = $hsl['h'];
-
-    $offsets = match ($type) {
-        'complementary' => [0, 180],
-        'analogous'     => [-30, 0, 30],
-        'triadic'       => [0, 120, 240],
-        'tetradic'      => [0, 90, 180, 270],
-        'split'         => [0, 150, 210],
-        default         => [0],
-    };
-
-    $result = [];
-    foreach ($offsets as $off) {
-        $h = (($base + $off) % 360 + 360) % 360;
-        ['r' => $nr, 'g' => $ng, 'b' => $nb] = hsl_to_rgb($h, $hsl['s'], $hsl['l']);
-        $result[] = rgb_to_hex($nr, $ng, $nb);
-    }
-
-    // مونوکروم: تغییر روشنایی
-    if ($type === 'monochrome') {
-        $result = [];
-        foreach ([15, 30, 45, 60, 75, 90] as $l) {
-            ['r' => $nr, 'g' => $ng, 'b' => $nb] = hsl_to_rgb($hsl['h'], $hsl['s'], $l);
-            $result[] = rgb_to_hex($nr, $ng, $nb);
-        }
-    }
-
-    return $result;
-}

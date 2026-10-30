@@ -120,19 +120,6 @@ try {
             json_out(['ok' => true, 'hex' => $hex]);
         }
 
-        case 'palette_random': {
-            $id = (int) ($_POST['id'] ?? 0);
-            $replace = ($_POST['replace'] ?? '1') !== '0';
-            if (!palette_find($id)) {
-                json_out(['ok' => false, 'error' => 'پالت یافت نشد.'], 404);
-            }
-            $hexes = palette_randomize($id, $replace);
-            if (!$hexes) {
-                json_out(['ok' => false, 'error' => 'ساخت پالت تصادفی ناموفق بود.'], 500);
-            }
-            json_out(['ok' => true, 'colors' => count($hexes), 'hexes' => $hexes]);
-        }
-
         case 'palette_import': {
             $raw = (string) ($_POST['data'] ?? '');
             try {
