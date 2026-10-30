@@ -43,6 +43,7 @@
 *   **JSON** — for programmatic use
 *   **Tailwind** — for Tailwind CSS config
 *   **TXT** — simple HEX list
+*   **JSON backup** — export one palette or all palettes and import them back later
 
 ### 🌙 User Interface
 *   Light and dark themes with auto-detection
@@ -91,6 +92,16 @@
 
 ---
 
+## 🔄 JSON Import & Export
+
+*   **Export a single palette:** open the palette → export menu → **JSON**
+*   **Export all palettes:** export menu → **JSON — All palettes**
+*   **Import:** header → **Import JSON**, then pick a `.json` file
+*   Importing always **creates new palettes** and never overwrites existing data. Palette names, descriptions, colors, and starred colors are restored.
+*   Both single-palette and all-palettes files are accepted. Invalid colors are skipped and reported in the result message.
+
+---
+
 ## 📸 Screenshot
 
 <p align="center">
@@ -111,7 +122,8 @@ ColorManager/
 │   ├── database.php   PDO connection and schema
 │   ├── repository.php CRUD operations
 │   ├── helpers.php    Helper functions
-│   └── color_tools.php Color conversion and schemes
+│   ├── color_tools.php Color conversion and schemes
+│   └── transfer.php   JSON export/import helpers
 ├── assets/
 │   ├── style.css      Styles
 │   └── app.js         Frontend logic
@@ -137,6 +149,7 @@ All requests go to `src/api.php` via POST with CSRF token.
 | `color_reorder` | Reorder colors | palette_id, ids[] |
 | `color_shade` | Lighten/darken | id, percent |
 | `palette_random` | Random palette | id, replace |
+| `palette_import` | Import palettes from JSON | data (JSON string) |
 
 ---
 

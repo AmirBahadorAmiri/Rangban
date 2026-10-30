@@ -275,6 +275,77 @@ document.addEventListener('mousedown', ev => {
     if (menu && !menu.hidden && !ev.target.closest('.export-wrap')) menu.hidden = true;
 });
 
+/* ---------- درون‌ریزی JSON ---------- */
+const importInput = $('#import-file');
+
+$('#btn-import')?.addEventListener('click', () => importInput?.click());
+
+/** استخراج فهرست پالت‌ها از هر سه قالب پشتیبانی‌شده */
+function importPaletteList(data) {
+    if (Array.isArray(data)) return data;
+    if (data && Array.isArray(data.palettes)) return data.palettes;
+    if (data && Array.isArray(data.colors)) return [data];
+    return null;
+}
+
+importInput?.addEventListener('change', async () => {
+    const file = importInput.files?.[0];
+    importInput.value = '';
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+        toast('حجم فایل بیشتر از ۲ مگابایت است.', 'error');
+        return;
+    }
+
+    let text;
+    try {
+        text = await file.text();
+    } catch {
+        toast('خواندن فایل ناموفق بود.', 'error');
+        return;
+    }
+
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch {
+        toast('فایل JSON معتبر نیست.', 'error');
+        return;
+    }
+
+    const list = importPaletteList(data);
+    if (!list) {
+        toast('ساختار فایل شناخته نشد (کلید palettes یا colors لازم است).', 'error');
+        return;
+    }
+    if (!list.length) {
+        toast('فایل هیچ پالتی ندارد.', 'error');
+        return;
+    }
+
+    const colorTotal = list.reduce(
+        (sum, p) => sum + (p && Array.isArray(p.colors) ? p.colors.length : 0),
+        0
+    );
+    if (!confirm(`وارد کردن ${list.length} پالت با ${colorTotal} رنگ؟`)) return;
+
+    const res = await api('palette_import', { data: text });
+    if (!res.ok) {
+        toast(res.error || 'ورود پالت‌ها ناموفق بود.', 'error');
+        return;
+    }
+
+    let message = `وارد شد: ${res.palettes} پالت و ${res.colors} رنگ`;
+    if (res.skipped) message += ` (${res.skipped} رنگ نامعتبر رد شد)`;
+    toast(message);
+
+    const firstId = Array.isArray(res.ids) && res.ids.length ? res.ids[0] : null;
+    setTimeout(() => {
+        location.href = firstId ? '?palette=' + firstId : location.href;
+    }, 700);
+});
+
 /* ---------- Context Menu اختصاصی ---------- */
 const ctxMenu = $('#ctx-menu');
 let ctxTarget = null;

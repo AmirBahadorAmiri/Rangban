@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/repository.php';
+require_once __DIR__ . '/transfer.php';
 
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
@@ -130,6 +131,23 @@ try {
                 json_out(['ok' => false, 'error' => 'ساخت پالت تصادفی ناموفق بود.'], 500);
             }
             json_out(['ok' => true, 'colors' => count($hexes), 'hexes' => $hexes]);
+        }
+
+        case 'palette_import': {
+            $raw = (string) ($_POST['data'] ?? '');
+            try {
+                $parsed = transfer_parse_import($raw);
+                $result = transfer_import($parsed['palettes']);
+            } catch (InvalidArgumentException $ex) {
+                json_out(['ok' => false, 'error' => $ex->getMessage()], 422);
+            }
+            json_out([
+                'ok'       => true,
+                'ids'      => $result['ids'],
+                'palettes' => $result['palettes'],
+                'colors'   => $result['colors'],
+                'skipped'  => $parsed['skipped'],
+            ]);
         }
 
         default:

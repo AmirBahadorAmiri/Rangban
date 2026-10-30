@@ -302,6 +302,7 @@ body {
     font-size: 13.5px;
 }
 .dropdown a:hover { background: var(--bg-3); }
+.dropdown-sep { height: 1px; background: var(--border); margin: 6px 0; }
 
 /* ============ شبکه‌ی نمونه‌رنگ‌ها ============ */
 .swatch-grid {

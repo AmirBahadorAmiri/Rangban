@@ -47,7 +47,7 @@ $activePalette = $activeId ? palette_find($activeId) : null;
     document.head.appendChild(meta);
 })();
 </script>
-<link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="stylesheet" href="assets/style.css?v=5">
 <link rel="icon" href="assets/logo.svg">
 </head>
 <body>
@@ -68,6 +68,11 @@ $activePalette = $activeId ? palette_find($activeId) : null;
             <span>جستجو</span>
             <kbd>Ctrl K</kbd>
         </button>
+        <button class="btn btn-ghost" id="btn-import" title="وارد کردن پالت از فایل JSON">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21V9m0 0 4 4m-4-4-4 4M4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/></svg>
+            <span>ورود JSON</span>
+        </button>
+        <input type="file" id="import-file" accept=".json,application/json" hidden>
         <button class="btn btn-primary" id="btn-new-palette">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             <span>پالت جدید</span>
@@ -125,6 +130,8 @@ $activePalette = $activeId ? palette_find($activeId) : null;
                         <?php foreach (['css' => 'CSS Variables', 'scss' => 'SCSS', 'json' => 'JSON', 'tailwind' => 'Tailwind', 'txt' => 'TXT'] as $f => $label): ?>
                             <a href="export.php?palette=<?= (int) $activePalette['id'] ?>&format=<?= $f ?>" download><?= $label ?></a>
                         <?php endforeach; ?>
+                        <div class="dropdown-sep"></div>
+                        <a href="export.php?scope=all&format=json" download>JSON — همهٔ پالت‌ها</a>
                     </div>
                 </div>
             </div>
@@ -252,6 +259,6 @@ window.CM = {
     paletteId: <?= (int) $activeId ?: 'null' ?>
 };
 </script>
-<script src="assets/app.js?v=4"></script>
+<script src="assets/app.js?v=5"></script>
 </body>
 </html>

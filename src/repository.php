@@ -65,14 +65,14 @@ function color_find(int $id): ?array
     return $row ?: null;
 }
 
-function color_create(int $paletteId, string $hex, ?string $name): int
+function color_create(int $paletteId, string $hex, ?string $name, bool $favorite = false): int
 {
     $stmt = db()->prepare('SELECT COALESCE(MAX(position), -1) + 1 AS pos FROM colors WHERE palette_id = ?');
     $stmt->execute([$paletteId]);
     $pos = (int) $stmt->fetchColumn();
 
-    $ins = db()->prepare('INSERT INTO colors (palette_id, hex_code, name, position) VALUES (?, ?, ?, ?)');
-    $ins->execute([$paletteId, $hex, $name !== null && trim($name) !== '' ? trim($name) : null, $pos]);
+    $ins = db()->prepare('INSERT INTO colors (palette_id, hex_code, name, position, is_favorite) VALUES (?, ?, ?, ?, ?)');
+    $ins->execute([$paletteId, $hex, $name !== null && trim($name) !== '' ? trim($name) : null, $pos, $favorite ? 1 : 0]);
     return (int) db()->lastInsertId();
 }
 

@@ -2,15 +2,39 @@
 /**
  * خروجی پالت در فرمت‌های مختلف
  * ?palette=ID&format=css|json|scss|tailwind|txt
+ * ?scope=all&format=json  — خروجی JSON همه‌ی پالت‌ها (قابل درون‌ریزی)
  */
 
 declare(strict_types=1);
 
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/src/repository.php';
+require_once __DIR__ . '/src/transfer.php';
+
+$format  = strtolower((string) ($_GET['format'] ?? 'css'));
+$allowed = ['css', 'json', 'scss', 'tailwind', 'txt'];
+if (!in_array($format, $allowed, true)) {
+    $format = 'css';
+}
+
+// خروجی گروهی (همه‌ی پالت‌ها) فقط در قالب JSON معنا دارد
+$scope = strtolower((string) ($_GET['scope'] ?? ''));
+if ($scope === 'all') {
+    if ($format !== 'json') {
+        http_response_code(400);
+        exit('خروجی گروهی فقط در قالب JSON موجود است.');
+    }
+
+    $payload  = transfer_all_data();
+    $filename = 'rangban-palettes-' . date('Ymd-His') . '.json';
+
+    header('Content-Type: application/json; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    echo json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
 
 $paletteId = (int) ($_GET['palette'] ?? 0);
-$format    = strtolower((string) ($_GET['format'] ?? 'css'));
 
 $palette = palette_find($paletteId);
 if (!$palette) {
@@ -43,20 +67,24 @@ foreach ($colors as $i => $c) {
     $varNames[] = $candidate;
 }
 
-header('Content-Type: text/plain; charset=utf-8');
+$contentTypes = [
+    'css'      => 'text/css; charset=utf-8',
+    'json'     => 'application/json; charset=utf-8',
+    'scss'     => 'text/x-scss; charset=utf-8',
+    'tailwind' => 'application/javascript; charset=utf-8',
+    'txt'      => 'text/plain; charset=utf-8',
+];
+
+header('Content-Type: ' . $contentTypes[$format]);
 header('Content-Disposition: attachment; filename="' . $filename . '"');
 
 switch ($format) {
 
     case 'json':
-        $out = ['name' => $palette['name'], 'description' => $palette['description'], 'colors' => []];
-        foreach ($colors as $i => $c) {
-            $out['colors'][] = [
-                'hex'  => $c['hex_code'],
-                'name' => $c['name'] ?? $varNames[$i],
-            ];
-        }
-        echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        echo json_encode(
+            transfer_palette_data($palette, $colors),
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
         break;
 
     case 'scss':
