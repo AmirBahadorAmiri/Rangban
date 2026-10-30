@@ -48,14 +48,14 @@ $activePalette = $activeId ? palette_find($activeId) : null;
 })();
 </script>
 <link rel="stylesheet" href="assets/style.css?v=4">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='35' cy='40' r='28' fill='%23ff5e78'/><circle cx='65' cy='40' r='28' fill='%234dc9ff'/><circle cx='50' cy='68' r='28' fill='%23ffd166'/></svg>">
+<link rel="icon" href="assets/logo.svg">
 </head>
 <body>
 
 <!-- ===== هدر ===== -->
 <header class="app-header">
     <div class="brand">
-        <span class="brand-mark"></span>
+        <img class="brand-mark" src="assets/logo.svg" alt="رنگ‌بان">
         <h1>رنگ‌بان</h1>
     </div>
     <nav class="header-actions">

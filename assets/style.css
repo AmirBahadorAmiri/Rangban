@@ -119,15 +119,11 @@ body {
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
 .brand-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
-    background:
-        radial-gradient(circle at 28% 30%, #ff5e78 0 34%, transparent 35%),
-        radial-gradient(circle at 72% 30%, #4dc9ff 0 34%, transparent 35%),
-        radial-gradient(circle at 50% 75%, #ffd166 0 34%, transparent 35%),
-        var(--bg-2);
-    box-shadow: 0 0 0 2px var(--border-hi);
+    width: 32px;
+    height: 32px;
+    border: none;
+    outline: none;
+    background: none;
 }
 .header-actions { display: flex; gap: 10px; align-items: center; }
 

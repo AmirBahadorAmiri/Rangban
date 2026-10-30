@@ -1,92 +1,154 @@
-# رنگ‌بان — Rangban
+<p align="center">
+  🌍 Read in English: <a href="README.md"><b>English</b></a>
+</p>
 
-[English](README.md) | [فارسی](#رنگ‌بان)
+<p align="center">
+  <img src="assets/logo.svg" width="120" title="رنگ‌بان">
+</p>
 
-مدیریت پالت رنگ تحت وب با قابلیت خروجی به CSS/SCSS/JSON/Tailwind.
+<h1 align="center">رنگ‌بان 🎨</h1>
+<p align="center"><b>مدیریت پالت رنگ برای طراحان و توسعه‌دهندگان</b></p>
 
-## نصب
+<p align="center">
+  ساخت، سازماندهی و خروجی گرفتن از پالت‌های رنگی با رابط فارسی
+</p>
 
-```bash
-mysql -u root -e "CREATE DATABASE rangban"
-mysql -u root rangban < db/schema.sql
-# فایل config.php را با اطلاعات دیتابیس ویرایش کنید
-php -S localhost:8000
+---
+
+## 📥 نصب و راه‌اندازی
+
+<p align="center">
+  <a href="https://github.com/AmirBahadorAmiri/Rangban/archive/refs/heads/main.zip"><b>⬇️ دانلود مستقیم</b></a>
+</p>
+
+---
+
+## 🌟 ویژگی‌ها
+
+### 📋 مدیریت پالت
+*   ساخت پالت رنگ با نام و توضیح
+*   **Drag & drop برای مرتب‌سازی رنگ‌ها**
+*   جستجوی سریع پالت و رنگ
+*   ستاره‌دار کردن رنگ‌های مهم
+
+### 🎨 کار با رنگ
+*   افزودن رنگ با کد HEX یا انتخابگر رنگ
+*   روشن‌تر و تیره‌تر کردن رنگ (+۱۰٪ / -۱۰٪)
+*   نمایش RGB و HSL به صورت خودکار
+*   **پالت تصادفی با ۶ الگوی هماهنگ**
+
+### 💾 خروجی گرفتن
+*   **CSS Variables** — برای پروژه‌های وب
+*   **SCSS** — برای پروژه‌های Sass
+*   **JSON** — برای استفاده در برنامه‌ها
+*   **Tailwind** — برای تنظیمات Tailwind CSS
+*   **TXT** — لیست ساده کدهای HEX
+
+### 🌙 رابط کاربری
+*   تم روشن و تاریک با تشخیص خودکار
+*   منوی راست‌کلیک برای عملیات سریع
+*   طراحی RTL کامل فارسی
+
+---
+
+## 🛠 تکنولوژی‌ها
+
+*   **زبان:** PHP 8+
+*   **دیتابیس:** MySQL / MariaDB
+*   **معماری:** MVC ساده (بدون فریمورک)
+*   **رابط:** HTML5, CSS3, Vanilla JavaScript
+*   **امنیت:** CSRF Protection, PDO Prepared Statements
+
+---
+
+## 🚀 راهنمای نصب
+
+1. پیش‌نیازها را نصب کنید:
+   *   XAMPP یا سرور PHP مشابه
+   *   MySQL/MariaDB
+
+2. پروژه را کلون کنید:
+   ```bash
+   git clone https://github.com/your-repo/ColorManager.git
+   ```
+
+3. پروژه را در پوشه `htdocs` قرار دهید.
+
+4. تنظیمات دیتابیس را در `config.php` ویرایش کنید:
+   ```php
+   const DB_HOST = '127.0.0.1';
+   const DB_NAME = 'rangban';
+   const DB_USER = 'root';
+   const DB_PASS = '';
+   ```
+
+5. پروژه را در مرورگر باز کنید:
+   ```
+   http://localhost/ColorManager
+   ```
+
+> دیتابیس و جداول به صورت خودکار ساخته می‌شوند.
+
+---
+
+## 📸 تصویر
+
+<p align="center">
+  <img alt="تصویر رنگ‌بان" src="assets/screenshot/screen1.png" />
+</p>
+
+---
+
+## 📁 ساختار پروژه
+
 ```
-
-## امکانات
-
-- ساخت/ویرایش/حذف پالت رنگ
-- افزودن رنگ با انتخابگر HEX
-- جابه‌جایی با drag-and-drop
-- ستاره‌دار کردن رنگ‌ها
-- روشن‌تر/تیره‌تر کردن (±10%)
-- تولید پالت تصادفی
-- خروجی: CSS، SCSS، JSON، Tailwind، TXT
-- تم تاریک/روشن با تشخیص خودکار
-- رابط فارسی
-
-## پیش‌نیازها
-
-- PHP 8.0+
-- MySQL 5.7+ / MariaDB 10.3+
-
-## فرمت‌های خروجی
-
-| فرمت | مثال |
-|------|------|
-| CSS | `:root { --primary: #FF5733; }` |
-| SCSS | `$primary: #FF5733;` |
-| JSON | `{"colors": [{"hex": "#FF5733", "name": "primary"}]}` |
-| Tailwind | `colors: { primary: '#FF5733' }` |
-| TXT | `#FF5733` (هر خط یک رنگ) |
-
-## مرجع API
-
-همه endpointها از طریق `src/api.php` (POST/GET با توکن CSRF).
-
-| عملیات | پارامترهای اجباری | اختیاری |
-|--------|-------------------|---------|
-| `palette_create` | `name` | `description` |
-| `palette_update` | `id`, `name` | `description` |
-| `palette_delete` | `id` | — |
-| `color_add` | `palette_id`, `hex` | `name` |
-| `color_update` | `id`, `hex` | `name` |
-| `color_delete` | `id` | — |
-| `color_favorite` | `id` | — |
-| `color_reorder` | `palette_id`, `ids` (آرایه JSON) | — |
-| `color_shade` | `id`, `percent` (±1-50) | — |
-| `palette_random` | `id` | `replace` (پیش‌فرض: 1) |
-
-## ساختار پروژه
-
-```
-├── index.php           # رابط اصلی برنامه
-├── config.php          # تنظیمات دیتابیس
-├── export.php          # endpoint خروجی
+ColorManager/
+├── index.php          صفحه اصلی
+├── config.php         تنظیمات و اتصال دیتابیس
+├── export.php         خروجی گرفتن
 ├── src/
-│   ├── api.php         # هندلر درخواست‌های AJAX
-│   ├── repository.php  # عملیات CRUD دیتابیس
-│   ├── database.php    # اتصال PDO
-│   ├── helpers.php     # CSRF، فلش‌مسیج، پاکسازی
-│   └── color_tools.php # تبدیل HEX/RGB/HSL، کنتراست WCAG
+│   ├── api.php        endpoint عملیات AJAX
+│   ├── database.php   اتصال PDO و ساخت جداول
+│   ├── repository.php عملیات CRUD
+│   ├── helpers.php    توابع کمکی
+│   └── color_tools.php تبدیل رنگ و scheme
 ├── assets/
-│   ├── style.css       # استایل‌های برنامه
-│   └── app.js          # جاوااسکریپت فرانت‌اند
+│   ├── style.css      استایل
+│   └── app.js         منطق فرانت‌اند
 └── db/
-    └── schema.sql      # اسکیمای دیتابیس
+    └── seed.php       داده نمونه
 ```
 
-## ابزارهای رنگ
+---
 
-توابع داخلی در `src/color_tools.php`:
+## 🔌 API Endpoint
 
-- `hex_to_rgb()` / `rgb_to_hex()` — تبدیل HEX ↔ RGB
-- `rgb_to_hsl()` / `hsl_to_rgb()` — تبدیل RGB ↔ HSL
-- `shade_hex()` — روشن‌تر/تیره‌تر با درصد
-- `contrast_ratio()` — نسبت کنتراست WCAG بین دو رنگ
-- `readable_text_color()` — انتخاب خودکار متن سفید/مشکی روی پس‌زمینه
-- `generate_scheme()` — تولید پالت‌های هماهنگ (مکمل، مشابه، سه‌گانه، چهارگانه، اسپلیت، تک‌رنگ)
+همه درخواست‌ها به `src/api.php` با متد POST و CSRF token.
 
-## لایسنس
+| Action | توضیح | پارامترها |
+|--------|-------|-----------|
+| `palette_create` | ساخت پالت | name, description |
+| `palette_update` | ویرایش پالت | id, name, description |
+| `palette_delete` | حذف پالت | id |
+| `color_add` | افزودن رنگ | palette_id, hex, name |
+| `color_update` | ویرایش رنگ | id, hex, name |
+| `color_delete` | حذف رنگ | id |
+| `color_favorite` | ستاره‌دار کردن | id |
+| `color_reorder` | مرتب‌سازی | palette_id, ids[] |
+| `color_shade` | روشن/تیره | id, percent |
+| `palette_random` | پالت تصادفی | id, replace |
 
-MIT
+---
+
+## 👨‍💻 توسعه‌دهنده
+
+توسعه داده شده توسط **تیم رنگ‌بان**
+
+> [!TIP]
+> برای داده نمونه، فایل `db/seed.php` را در مرورگر اجرا کنید.
+
+---
+
+## 📄 لایسنس
+
+این پروژه تحت لایسنس **MIT** منتشر شده است.

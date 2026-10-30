@@ -1,92 +1,154 @@
-# Rangban — رنگ‌بان
+<p align="center">
+  📄 Read in Persian: <a href="README.fa.md"><b>فارسی</b></a>
+</p>
 
-[فارسی](README.fa.md) | [English](#rangban)
+<p align="center">
+  <img src="assets/logo.svg" width="120" title="Rangban">
+</p>
 
-Web-based color palette manager with export to CSS/SCSS/JSON/Tailwind.
+<h1 align="center">Rangban 🎨</h1>
+<p align="center"><b>Color Palette Manager for Designers & Developers</b></p>
 
-## Install
+<p align="center">
+  Create, organize, and export color palettes with a Persian interface
+</p>
 
-```bash
-mysql -u root -e "CREATE DATABASE rangban"
-mysql -u root rangban < db/schema.sql
-# Edit config.php with DB credentials
-php -S localhost:8000
+---
+
+## 📥 Download & Install
+
+<p align="center">
+  <a href="https://github.com/AmirBahadorAmiri/Rangban/archive/refs/heads/main.zip"><b>⬇️ Direct Download</b></a>
+</p>
+
+---
+
+## 🌟 Key Features
+
+### 📋 Palette Management
+*   Create color palettes with name and description
+*   **Drag & drop to reorder colors**
+*   Quick search for palettes and colors
+*   Star important colors for quick access
+
+### 🎨 Color Tools
+*   Add colors via HEX code or color picker
+*   Lighten and darken colors (+10% / -10%)
+*   Automatic RGB and HSL display
+*   **Random palette with 6 harmony schemes**
+
+### 💾 Export Options
+*   **CSS Variables** — for web projects
+*   **SCSS** — for Sass projects
+*   **JSON** — for programmatic use
+*   **Tailwind** — for Tailwind CSS config
+*   **TXT** — simple HEX list
+
+### 🌙 User Interface
+*   Light and dark themes with auto-detection
+*   Right-click context menu for quick actions
+*   Full RTL Persian interface
+
+---
+
+## 🛠 Technologies Used
+
+*   **Language:** PHP 8+
+*   **Database:** MySQL / MariaDB
+*   **Architecture:** Simple MVC (no framework)
+*   **Frontend:** HTML5, CSS3, Vanilla JavaScript
+*   **Security:** CSRF Protection, PDO Prepared Statements
+
+---
+
+## 🚀 Installation & Run Guide
+
+1. Install prerequisites:
+   *   XAMPP or similar PHP server
+   *   MySQL/MariaDB
+
+2. Clone the project:
+   ```bash
+   git clone https://github.com/your-repo/ColorManager.git
+   ```
+
+3. Place the project in your `htdocs` folder.
+
+4. Configure database in `config.php`:
+   ```php
+   const DB_HOST = '127.0.0.1';
+   const DB_NAME = 'rangban';
+   const DB_USER = 'root';
+   const DB_PASS = '';
+   ```
+
+5. Open in browser:
+   ```
+   http://localhost/ColorManager
+   ```
+
+> Database and tables are created automatically.
+
+---
+
+## 📸 Screenshot
+
+<p align="center">
+  <img alt="Rangban Screenshot" src="assets/screenshot/screen1.png" />
+</p>
+
+---
+
+## 📁 Project Structure
+
 ```
-
-## Features
-
-- Create/edit/delete color palettes
-- Add colors with HEX picker
-- Drag-and-drop reordering
-- Favorite colors
-- Lighten/darken colors (±10%)
-- Random palette generator
-- Export: CSS, SCSS, JSON, Tailwind, TXT
-- Dark/light theme with auto-detect
-- Persian (Farsi) UI
-
-## Requirements
-
-- PHP 8.0+
-- MySQL 5.7+ / MariaDB 10.3+
-
-## Export Formats
-
-| Format | Example |
-|--------|---------|
-| CSS | `:root { --primary: #FF5733; }` |
-| SCSS | `$primary: #FF5733;` |
-| JSON | `{"colors": [{"hex": "#FF5733", "name": "primary"}]}` |
-| Tailwind | `colors: { primary: '#FF5733' }` |
-| TXT | `#FF5733` (one per line) |
-
-## API Reference
-
-All endpoints via `src/api.php` (POST/GET with CSRF token).
-
-| Action | Required Params | Optional |
-|--------|----------------|----------|
-| `palette_create` | `name` | `description` |
-| `palette_update` | `id`, `name` | `description` |
-| `palette_delete` | `id` | — |
-| `color_add` | `palette_id`, `hex` | `name` |
-| `color_update` | `id`, `hex` | `name` |
-| `color_delete` | `id` | — |
-| `color_favorite` | `id` | — |
-| `color_reorder` | `palette_id`, `ids` (JSON array) | — |
-| `color_shade` | `id`, `percent` (±1-50) | — |
-| `palette_random` | `id` | `replace` (default: 1) |
-
-## Project Structure
-
-```
-├── index.php           # Main application UI
-├── config.php          # Database configuration
-├── export.php          # Export endpoint
+ColorManager/
+├── index.php          Main page
+├── config.php         Config and database connection
+├── export.php         Export functionality
 ├── src/
-│   ├── api.php         # AJAX request handler
-│   ├── repository.php  # Database CRUD operations
-│   ├── database.php    # PDO connection
-│   ├── helpers.php     # CSRF, flash messages, sanitization
-│   └── color_tools.php # HEX/RGB/HSL conversion, WCAG contrast
+│   ├── api.php        AJAX operations endpoint
+│   ├── database.php   PDO connection and schema
+│   ├── repository.php CRUD operations
+│   ├── helpers.php    Helper functions
+│   └── color_tools.php Color conversion and schemes
 ├── assets/
-│   ├── style.css       # Application styles
-│   └── app.js          # Frontend JavaScript
+│   ├── style.css      Styles
+│   └── app.js         Frontend logic
 └── db/
-    └── schema.sql      # Database schema
+    └── seed.php       Sample data
 ```
 
-## Color Tools
+---
 
-Built-in functions in `src/color_tools.php`:
+## 🔌 API Endpoint
 
-- `hex_to_rgb()` / `rgb_to_hex()` — HEX ↔ RGB conversion
-- `rgb_to_hsl()` / `hsl_to_rgb()` — RGB ↔ HSL conversion
-- `shade_hex()` — Lighten/darken by percentage
-- `contrast_ratio()` — WCAG contrast ratio between colors
-- `readable_text_color()` — Auto-select white/black text for background
-- `generate_scheme()` — Generate harmonious palettes (complementary, analogous, triadic, tetradic, split, monochrome)
+All requests go to `src/api.php` via POST with CSRF token.
 
-## License
+| Action | Description | Parameters |
+|--------|-------------|------------|
+| `palette_create` | Create palette | name, description |
+| `palette_update` | Update palette | id, name, description |
+| `palette_delete` | Delete palette | id |
+| `color_add` | Add color | palette_id, hex, name |
+| `color_update` | Update color | id, hex, name |
+| `color_delete` | Delete color | id |
+| `color_favorite` | Toggle star | id |
+| `color_reorder` | Reorder colors | palette_id, ids[] |
+| `color_shade` | Lighten/darken | id, percent |
+| `palette_random` | Random palette | id, replace |
 
-MIT
+---
+
+## 👨‍💻 Developer
+
+Developed by **Rangban Team**
+
+> [!TIP]
+> For sample data, run `db/seed.php` in your browser.
+
+---
+
+## 📄 License
+
+This project is released under the **MIT** License.
