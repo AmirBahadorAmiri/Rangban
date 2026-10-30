@@ -47,7 +47,7 @@ $activePalette = $activeId ? palette_find($activeId) : null;
     document.head.appendChild(meta);
 })();
 </script>
-<link rel="stylesheet" href="assets/style.css?v=7">
+<link rel="stylesheet" href="assets/style.css?v=8">
 <link rel="icon" href="assets/logo.svg">
 </head>
 <body>

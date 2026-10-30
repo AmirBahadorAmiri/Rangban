@@ -271,13 +271,21 @@ body {
 }
 
 /* ============ کارگاه اصلی ============ */
-.workspace { padding: 30px 34px; overflow-y: auto; position: relative; }
+.workspace { padding: 0 34px 34px; overflow-y: auto; position: relative; }
+/* نوار عنوان پالت: فیکس بالای کارگاه، تمام‌عرض و تخت (بدون حالت کارت) */
 .ws-head {
+    position: sticky;
+    top: 0;
+    z-index: 30;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 26px;
+    margin: 0 -34px;
+    padding: 16px 34px;
+    background: var(--header-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
 }
 .ws-title h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; }
 .ws-desc { color: var(--text-2); font-size: 13.5px; margin-top: 5px; }
@@ -309,6 +317,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 16px;
+    margin-top: 26px;
 }
 .swatch {
     --sw-bg: #888;
@@ -629,7 +638,8 @@ body {
 @media (max-width: 860px) {
     .app-body { grid-template-columns: 1fr; }
     .sidebar { border-inline-end: none; border-bottom: 1px solid var(--border); max-height: 220px; }
-    .workspace { padding: 22px 18px; }
+    .workspace { padding: 0 18px 22px; }
+    .ws-head { margin: 0 -18px; padding: 13px 18px; }
     .app-header { padding: 12px 16px; }
     .ws-title h2 { font-size: 20px; }
     #btn-search-toggle span, #btn-search-toggle kbd { display: none; }

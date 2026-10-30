@@ -46,6 +46,7 @@
 
 ### 🌙 User Interface
 *   Light and dark themes with auto-detection
+*   Sticky palette header — palette name and action buttons stay pinned at the top while scrolling colors
 *   Right-click context menu for quick actions
 *   Full RTL Persian interface
 
